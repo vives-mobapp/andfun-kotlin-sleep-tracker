@@ -39,7 +39,7 @@ private val ONE_HOUR_MILLIS = TimeUnit.MILLISECONDS.convert(1, TimeUnit.HOURS)
  * Convert a duration to a formatted string for display.
  *
  * Examples:
- *
+ *s
  * 6 seconds on Wednesday
  * 2 minutes on Monday
  * 40 hours on Thursday
