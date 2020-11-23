@@ -20,7 +20,7 @@
         app:srcCompat="@drawable/ic_sleep_5" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/sleep_length"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
