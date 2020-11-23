@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android.trackmysleepquality.R
 import com.example.android.trackmysleepquality.TextItemViewHolder
+import com.example.android.trackmysleepquality.convertNumericQualityToString
 import com.example.android.trackmysleepquality.database.SleepNight
 
 class SleepNightAdapter : RecyclerView.Adapter<TextItemViewHolder>() {
@@ -18,27 +19,24 @@ class SleepNightAdapter : RecyclerView.Adapter<TextItemViewHolder>() {
             notifyDataSetChanged()
         }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TextItemViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SleepViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
-        val view = layoutInflater.inflate(R.layout.text_item_view, parent, false)
-        return TextItemViewHolder(view as TextView)
+        val view = layoutInflater.inflate(R.layout.list_item_sleep_night, parent, false)
+        return SleepViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: TextItemViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: SleepViewHolder, position: Int) {
         val item = data[position]
-        if (item.sleepQuality <= 1) {
-            holder.textView.setTextColor(Color.RED)
-        } else {
-            holder.textView.setTextColor(Color.BLACK)
-        }
-        holder.textView.text = item.sleepQuality.toString()
+        val res = holder.itemView.context.resources
+        holder.sleepLength.text = convertNumericQualityToString(item.startTimeMilli, item.endTimeMilli, res)
     }
 
     override fun getItemCount(): Int {
         return data.size
     }
 
-    class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
-        val sleepQuality: TextView = itemView.findViewById(R.id.sleep_length)
+    class SleepViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+        val sleepLength: TextView = itemView.findViewById(R.id.sleep_length)
+        val sleepQuality: TextView = itemView.findViewById(R.id.quality_string)
     }
 }
