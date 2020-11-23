@@ -2,6 +2,7 @@ package com.example.android.trackmysleepquality.sleeptracker
 
 import android.graphics.Color
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -35,5 +36,9 @@ class SleepNightAdapter : RecyclerView.Adapter<TextItemViewHolder>() {
 
     override fun getItemCount(): Int {
         return data.size
+    }
+
+    class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+        val sleepQuality: TextView = itemView.findViewById(R.id.sleep_length)
     }
 }
