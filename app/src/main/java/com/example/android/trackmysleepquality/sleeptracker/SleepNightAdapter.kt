@@ -5,11 +5,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.android.trackmysleepquality.*
 import com.example.android.trackmysleepquality.database.SleepNight
 import com.example.android.trackmysleepquality.databinding.ListItemSleepNightBinding
 
-class SleepNightAdapter : ListAdapter<SleepNight, SleepNightAdapter.SleepViewHolder>(SleepNightDiffCallback()) {
+class SleepNightAdapter(val clickListener: SleepNightListener) : ListAdapter<SleepNight, SleepNightAdapter.SleepViewHolder>(SleepNightDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SleepViewHolder {
         return SleepViewHolder.from(parent)
@@ -17,24 +16,15 @@ class SleepNightAdapter : ListAdapter<SleepNight, SleepNightAdapter.SleepViewHol
 
     override fun onBindViewHolder(holder: SleepViewHolder, position: Int) {
         val item = getItem(position)
-        holder.bind(item)
+        holder.bind(item, clickListener)
     }
 
     class SleepViewHolder private constructor(val binding: ListItemSleepNightBinding): RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: SleepNight) {
-            val res = itemView.context.resources
-            binding.sleepLength.text = convertDurationToFormatted(item.startTimeMilli, item.endTimeMilli, res)
-            binding.qualityString.text = convertNumericQualityToString(item.sleepQuality, res)
-            binding.qualityImage.setImageResource(when (item.sleepQuality) {
-                0 -> R.drawable.ic_sleep_0
-                1 -> R.drawable.ic_sleep_1
-                2 -> R.drawable.ic_sleep_2
-                3 -> R.drawable.ic_sleep_3
-                4 -> R.drawable.ic_sleep_4
-                5 -> R.drawable.ic_sleep_5
-                else -> R.drawable.ic_sleep_active
-            })
+        fun bind(item: SleepNight, clickListener: SleepNightListener) {
+            binding.sleep = item
+            binding.clickListener = clickListener
+            binding.executePendingBindings()
         }
 
         companion object {
@@ -54,6 +44,11 @@ class SleepNightAdapter : ListAdapter<SleepNight, SleepNightAdapter.SleepViewHol
         override fun areContentsTheSame(oldItem: SleepNight, newItem: SleepNight): Boolean {
             return oldItem == newItem
         }
+    }
+
+
+    class SleepNightListener(val clickListener: (sleepId: Long) -> Unit) {
+        fun onClick(night: SleepNight) = clickListener(night.nightId)
     }
 
 }
